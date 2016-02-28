@@ -127,7 +127,7 @@ function setup_rootmount {
     then
 	mkdir -p "$rootmount/etc/grub.d" 
 	export partuuid=$(blkid $partition | sed -re 's/.*: UUID="([^"]+)".*/\1/')
-	export decruuid=$(blkid $decrypted | sed -re 's/.*: UUID="([^"]+)".*/\1/')
+	export decruuid=$(blkid /dev/mapper/$decrypted | sed -re 's/.*: UUID="([^"]+)".*/\1/')
 	echo "Adding flashback with uuid $partuuid"
 	echo "system UUID=$partuuid none luks" >> "$rootmount/etc/crypttab"
 	echo "UUID=$decruuid / btrfs subvol=@root.curr 0 0" >> "$rootmount/etc/fstab"
