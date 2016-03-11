@@ -11,7 +11,8 @@ Steps:
  - dd the tmp/raw.img onto a disk or flashdrive and you have a basic encrypted washable system
 
 Notes:
- - the system starts afresh every boot from a snapshot of @root.base => @root.curr so anything you wish persisted must be stored in @root.base
- - the system keeps copies of previous states in @root.snaps, these need t be maintained manually
+ - the /home is mounted separately so everything user-side is persisted between reboots
+ - the system starts afresh every boot from a snapshot of @root.base => @root.curr so anything system-side you wish persisted must be stored in @root.base
+ - the system keeps copies of previous states in @root.snaps, these need to be maintained manually
  - if you use the image as it is, you'll eventually run out of space so grow it to your needs
- - to mount the @root.base in tmp/root.mount, run `./open.sh`, you can chroot, then umount with `./close.sh`
+ - to mount the tmp/raw.img @root.base in tmp/root.mount, run `./open.sh`, you can chroot, then umount with `./close.sh`
