@@ -13,4 +13,4 @@ Notes:
  - the system starts afresh every boot from a snapshot of @root.base => @root.curr so anything you wish persisted must be stored in @root.base
  - the system keeps copies of previous states in @root.snaps, these need t be maintained manually
  - if you use the image as it is, you'll eventually run out of space so grow it to your needs
- - to mount the root.base in tmp/root.mount, run `./open.sh` and umount with `./close.sh`
+ - to mount the @root.base in tmp/root.mount, run `./open.sh` and umount with `./close.sh`
