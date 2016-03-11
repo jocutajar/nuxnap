@@ -6,7 +6,7 @@ Steps:
  - clone the repo and cd into it
  - optionally create a 'tmp' folder and mount tmpfs over it if you have that much memory to speed things up
  - run `./download.sh` to debootstrap or provide your own bootstrap with recent debian
- - run `./build.sh` to do its magic :boom:WARNING: do not install grub on any device when asked to!
+ - run `./build.sh` to do its magic :boom:WARNING: do NOT install grub on any device when asked to!
  - run `./runqemu.sh` to run an emulated system from the generated image
  - dd the tmp/raw.img onto a disk or flashdrive and you have a basic encrypted washable system
 
