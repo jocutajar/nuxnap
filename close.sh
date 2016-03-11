@@ -1,20 +1,22 @@
 #!/bin/bash
-rawimage=raw.img
 
-my_dir="$(dirname "$0")"
-. "$my_dir/state.sh"
+. config.sh
+
+. "$state"
 
 echo "Unmounting $rootmount"
-umount "$rootmount/dev"
-umount "$rootmount/proc"
-umount "$rootmount/sys"
-umount "$rootmount"
+sudo umount "$rootmount/dev/pts"
+sudo umount "$rootmount/dev"
+sudo umount "$rootmount/proc"
+sudo umount "$rootmount/sys"
+sudo umount "$rootmount"
 
 echo "Closing luks $decrypted"
-cryptsetup luksClose "$decrypted"
+sudo cryptsetup luksClose "$decrypted"
 
 echo "Removing partitions $loopdev"
-kpartx -d "$loopdev"
+sudo kpartx -d "$loopdev"
 
-echo "Removing loopback $loopdev"
-losetup -d "$loopdev"
+echo "Removing loop dev $loopdev"
+sudo losetup -d "$loopdev"
+
