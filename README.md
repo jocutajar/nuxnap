@@ -8,6 +8,7 @@ Steps:
  - run `./download.sh` to debootstrap or provide your own bootstrap with recent debian
  - run `./build.sh` to do its magic
  - run `./runqemu.sh` to run an emulated system from the generated image
+ - dd the tmp/raw.img onto a disk or flashdrive and you have a basic encrypted washable system
 
 Notes:
  - the system starts afresh every boot from a snapshot of @root.base => @root.curr so anything you wish persisted must be stored in @root.base
