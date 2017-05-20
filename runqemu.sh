@@ -4,5 +4,5 @@
 
 qemu-system-x86_64 \
 	-serial stdio \
-	-hda "$rawimage"
+	-drive format=raw,file="$rawimage"
 

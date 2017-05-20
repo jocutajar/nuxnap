@@ -54,21 +54,27 @@ function rollback_losetup {
 
 function setup_partitions {
     echo "Registering partitions of $loopdev"
-    kpartx -a "$loopdev" 
+    kpartx -l "${loopdev}"
+    kpartx -a "${loopdev}" 
     [ 0 == $? ] && setup_cryptsetup || rollback_losetup
 }
 
 function rollback_kpartx {
     echo "Removing partitions $loopdev"
-    kpartx -d "$loopdev"
+    kpartx -d "${loopdev}"
     [ 0 == $? ] && return 202 || return 22
 }
 
 function setup_cryptsetup {
+    
     export partition="/dev/mapper/${loopdev##*/}p1"
     export decrypted="${partition##*/}.decrypted"
     password=initialpassword
+    sleep 3 # for kpartx to be ready
 
+    echo "Diagnostics:"
+    ls -la /dev/mapper/loop*
+    
     echo "Cryptsetup luksOpen partition $partition"
     echo -n "$password" | cryptsetup luksOpen "$partition" "$decrypted"
 
@@ -77,6 +83,12 @@ function setup_cryptsetup {
 	echo "Cryptsetup luksFormat partition $partition"
 	echo -n "$password" | cryptsetup -q luksFormat "$partition" &&
 	echo -n "$password" | cryptsetup luksOpen "$partition" "$decrypted"    
+        if [ 0 != $? ]
+        then
+            echo "Randomize/encrypt partition"
+            dd if=/dev/zero of="/dev/mapper/${decrypted}" bs=1M >/dev/null 2>&1
+            echo "randomized"
+        fi
     fi
 
     [ 0 == $? ] && setup_btrfs || rollback_kpartx
@@ -172,7 +184,7 @@ function rollback_rootmount {
 function chroot_script {
     echo -n "root:initialpassword" | chpasswd
     apt-get update
-    apt-get -y install locales kbd less whiptail aptitude btrfs-tools cryptsetup grub-pc linux-image-amd64
+    apt-get -y install locales kbd less whiptail aptitude btrfs-tools cryptsetup grub-pc linux-image-amd64 systemd-sysv network-manager
     sed -i -e "s/# $LANG/$LANG/" /etc/locale.gen
     locale-gen $LANG
     update-locale LANG=$LANG
